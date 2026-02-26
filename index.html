@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentContent — AI Content Engine for Real Estate Agents</title>
+<meta name="description" content="Create Instagram carousels, pitch decks, and market reports in seconds. AI-powered content with real market data for Dubai real estate agents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#08080A;--surface:#111113;--card:#161619;--border:#222226;
+  --muted:#6B6B76;--text:#ADADB8;--white:#F0F0F3;
+  --accent:#FF4D00;--accent-hover:#FF6A2A;
+  --accent-dim:rgba(255,77,0,0.08);--accent-border:rgba(255,77,0,0.18);
+  --accent-glow:rgba(255,77,0,0.04);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,8,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.04)}
+.logo{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--white)}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--muted);font-size:0.84rem;text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{padding:10px 22px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;font-family:'DM Sans';font-size:0.82rem;font-weight:600;cursor:pointer;text-decoration:none;transition:background 0.2s}
+.nav-cta:hover{background:var(--accent-hover)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:120px 48px 80px;max-width:1300px;margin:0 auto;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 40%,var(--accent-glow) 0%,transparent 60%);pointer-events:none}
+.hero-text{position:relative}
+.hero-tag{display:inline-block;padding:7px 14px;border-radius:5px;border:1px solid var(--accent-border);background:var(--accent-dim);font-size:0.68rem;font-weight:600;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:24px}
+.hero h1{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:700;color:var(--white);line-height:1.08;margin-bottom:20px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.7;margin-bottom:32px;max-width:480px}
+.hero-cta{display:flex;gap:14px;margin-bottom:40px}
+.btn-primary{padding:16px 32px;background:var(--accent);color:var(--bg);border:none;border-radius:10px;font-family:'DM Sans';font-size:0.95rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.btn-ghost{padding:16px 32px;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:10px;font-family:'DM Sans';font-size:0.95rem;text-decoration:none;transition:all 0.2s}
+.btn-ghost:hover{border-color:var(--muted);color:var(--white)}
+
+/* DEMO PREVIEW */
+.hero-demo{position:relative}
+.demo-window{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.5)}
+.demo-toolbar{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.demo-dot{width:10px;height:10px;border-radius:50%}
+.demo-dot.r{background:#FF5F57}.demo-dot.y{background:#FFBD2E}.demo-dot.g{background:#28C840}
+.demo-toolbar-title{margin-left:12px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.demo-body{display:grid;grid-template-columns:200px 1fr;min-height:400px}
+.demo-sidebar{background:var(--card);border-right:1px solid var(--border);padding:16px}
+.demo-sidebar-label{font-size:0.6rem;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px}
+.demo-type-btn{width:100%;padding:8px 10px;margin-bottom:6px;background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-size:0.72rem;font-family:'DM Sans';text-align:left;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s}
+.demo-type-btn:hover{background:var(--accent-dim);border-color:var(--accent-border)}
+.demo-type-btn.active{background:var(--accent-dim);border-color:var(--accent-border);color:var(--accent)}
+
+/* COLOR PALETTE */
+.demo-palette{margin-top:14px}
+.demo-palette-row{display:flex;gap:6px;margin-top:8px}
+.palette-swatch{width:22px;height:22px;border-radius:4px;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+.palette-swatch:hover,.palette-swatch.active{border-color:var(--white);transform:scale(1.15)}
+
+/* SLIDE PREVIEW */
+.demo-preview{padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.demo-slides-container{width:100%;max-width:280px}
+.demo-slide{aspect-ratio:4/5;border-radius:8px;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;transition:all 0.4s}
+.demo-slide .slide-num{font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:rgba(255,255,255,0.3);margin-bottom:14px}
+.demo-slide .slide-tag{display:inline-block;align-self:flex-start;padding:4px 10px;border-radius:3px;font-size:0.55rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px}
+.demo-slide h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;line-height:1.15;margin-bottom:10px}
+.demo-slide .slide-stat{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;line-height:1;margin-bottom:4px}
+.demo-slide .slide-stat-label{font-size:0.68rem;opacity:0.5;margin-bottom:12px}
+.demo-slide p{font-size:0.72rem;line-height:1.5;opacity:0.6}
+.demo-slide-dots{display:flex;gap:6px;justify-content:center;margin-top:14px}
+.demo-slide-dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.2s}
+.demo-slide-dot.active{width:20px;border-radius:3px;background:var(--accent)}
+
+/* AI CHAT BAR */
+.demo-chatbar{padding:10px 16px;background:var(--card);border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.demo-chatbar-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--muted);font-size:0.7rem;font-family:'DM Sans';font-style:italic}
+.demo-chatbar-btn{padding:8px 14px;background:var(--accent);color:var(--bg);border:none;border-radius:6px;font-size:0.65rem;font-weight:600;font-family:'DM Sans';cursor:pointer;white-space:nowrap}
+
+/* SECTIONS */
+section{padding:100px 48px;max-width:1200px;margin:0 auto}
+.section-tag{font-size:0.68rem;font-weight:600;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:14px}
+.section-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;color:var(--white);line-height:1.1;margin-bottom:14px}
+.section-sub{font-size:1rem;color:var(--muted);line-height:1.6;max-width:520px;margin-bottom:48px}
+
+/* HOW IT WORKS */
+.how-section{background:var(--surface);padding:100px 48px}
+.how-section .inner{max-width:1200px;margin:0 auto}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px 26px;transition:all 0.3s;position:relative;overflow:hidden}
+.step-card:hover{border-color:var(--accent-border);transform:translateY(-3px)}
+.step-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:0;transition:opacity 0.3s}
+.step-card:hover::after{opacity:1}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:18px}
+.step-icon{font-size:2rem;margin-bottom:14px}
+.step-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--white);margin-bottom:8px}
+.step-desc{font-size:0.84rem;color:var(--muted);line-height:1.6}
+
+/* TEMPLATE GALLERY */
+.templates-section{padding:100px 48px}
+.templates-section .inner{max-width:1200px;margin:0 auto}
+.template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.template-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.3s}
+.template-card:hover{border-color:var(--accent-border);transform:translateY(-3px)}
+.template-preview{aspect-ratio:4/5;position:relative;overflow:hidden}
+.template-slide-mini{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:24px 20px}
+.template-slide-mini .mini-tag{font-size:0.5rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;padding:3px 8px;border-radius:3px;display:inline-block;align-self:flex-start}
+.template-slide-mini h4{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;line-height:1.15;margin-bottom:6px}
+.template-slide-mini .mini-stat{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;line-height:1;margin-bottom:10px}
+.template-slide-mini p{font-size:0.62rem;opacity:0.6;line-height:1.4}
+.template-info{padding:14px 16px}
+.template-name{font-size:0.85rem;font-weight:600;color:var(--white)}
+.template-desc{font-size:0.7rem;color:var(--muted);margin-top:3px}
+.template-badge{display:inline-block;margin-top:8px;padding:3px 8px;border-radius:3px;background:var(--accent-dim);border:1px solid var(--accent-border);font-size:0.58rem;font-weight:600;color:var(--accent);letter-spacing:0.06em;text-transform:uppercase}
+
+/* DIFFERENTIATOR */
+.diff-section{background:var(--surface);padding:100px 48px}
+.diff-section .inner{max-width:1200px;margin:0 auto}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.diff-card{border-radius:14px;padding:36px 30px}
+.diff-card.us{background:var(--card);border:1px solid var(--accent-border)}
+.diff-card.them{background:var(--bg);border:1px solid var(--border)}
+.diff-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:22px}
+.diff-card.us .diff-title{color:var(--accent)}
+.diff-card.them .diff-title{color:var(--muted)}
+.diff-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;font-size:0.86rem;line-height:1.5}
+.diff-item .ico{flex-shrink:0;font-size:0.8rem;margin-top:2px}
+.diff-card.us .ico{color:var(--accent)}
+.diff-card.them .ico{color:#444}
+
+/* PRICING */
+.pricing-section{padding:100px 48px}
+.pricing-section .inner{max-width:1200px;margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 28px;transition:all 0.3s;position:relative}
+.price-card:hover{transform:translateY(-3px)}
+.price-card.featured{border-color:var(--accent-border)}
+.price-card.featured::before{content:'MOST POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:5px 16px;background:var(--accent);color:var(--bg);font-size:0.6rem;font-weight:700;letter-spacing:0.1em;border-radius:4px}
+.price-tier{font-size:0.7rem;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px}
+.price-amount{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--white);margin-bottom:6px}
+.price-amount span{font-size:0.9rem;color:var(--muted);font-family:'DM Sans'}
+.price-desc{font-size:0.82rem;color:var(--muted);margin-bottom:24px}
+.price-features{list-style:none;margin-bottom:28px}
+.price-features li{font-size:0.82rem;color:var(--text);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.price-features li::before{content:'✓';color:var(--accent);font-size:0.75rem;font-weight:700}
+.price-btn{display:block;text-align:center;padding:14px;border-radius:8px;font-family:'DM Sans';font-size:0.88rem;font-weight:600;text-decoration:none;transition:all 0.2s}
+.price-btn.outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.price-btn.outline:hover{border-color:var(--muted);color:var(--white)}
+.price-btn.gold{background:var(--accent);color:var(--bg);border:1px solid var(--accent)}
+.price-btn.gold:hover{background:var(--accent-hover)}
+
+/* CTA */
+.cta-section{padding:120px 48px;text-align:center;position:relative;max-width:700px;margin:0 auto}
+.cta-section::before{content:'';position:absolute;top:0;left:-200px;right:-200px;bottom:0;background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,transparent 60%);pointer-events:none}
+.cta-section h2{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;color:var(--white);line-height:1.1;margin-bottom:16px;position:relative}
+.cta-section h2 em{color:var(--accent);font-style:italic}
+.cta-section>p{font-size:1rem;color:var(--muted);margin-bottom:32px;position:relative}
+.waitlist-form{display:flex;gap:10px;justify-content:center;position:relative}
+.waitlist-form input{flex:1;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:'DM Sans';font-size:0.9rem;outline:none}
+.waitlist-form input:focus{border-color:var(--accent)}
+.waitlist-form input::placeholder{color:var(--muted)}
+.waitlist-form button{padding:16px 28px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;font-family:'DM Sans';font-size:0.9rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:background 0.2s}
+.waitlist-form button:hover{background:var(--accent-hover)}
+.waitlist-note{font-size:0.72rem;color:var(--muted);margin-top:14px;position:relative}
+
+/* FOOTER */
+footer{padding:40px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1rem;color:var(--white)}
+.footer-logo span{color:var(--accent)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{color:var(--muted);font-size:0.78rem;text-decoration:none}
+.footer-links a:hover{color:var(--white)}
+.footer-copy{font-size:0.72rem;color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding:120px 24px 60px}
+  .demo-body{grid-template-columns:1fr}
+  .demo-sidebar{display:none}
+  nav{padding:16px 20px}
+  .nav-links{display:none}
+  section,.how-section,.templates-section,.diff-section,.pricing-section{padding:60px 20px}
+  .steps-grid,.template-grid,.pricing-grid,.diff-grid{grid-template-columns:1fr}
+  .hero h1{font-size:2.2rem}
+  .section-title{font-size:1.8rem}
+  .waitlist-form{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Agent<span>Content</span></div>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#templates">Templates</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO WITH INTERACTIVE DEMO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-tag">Built for Dubai Real Estate Agents</div>
+    <h1>Stop creating content.<br>Start <em>generating</em> it.</h1>
+    <p class="hero-sub">Type an area name. Get Instagram carousels, pitch decks, and market reports — with real data, in your brand, in 30 seconds.</p>
+    <div class="hero-cta">
+      <a href="#waitlist" class="btn-primary">⚡ Join the Waitlist</a>
+      <a href="#how" class="btn-ghost">See How It Works</a>
+    </div>
+  </div>
+
+  <div class="hero-demo">
+    <div class="demo-window">
+      <div class="demo-toolbar">
+        <div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div>
+        <span class="demo-toolbar-title">agentcontent.net — Carousel Generator</span>
+      </div>
+      <div class="demo-body">
+        <!-- SIDEBAR with type picker + color palettes -->
+        <div class="demo-sidebar">
+          <div class="demo-sidebar-label">Content Type</div>
+          <button class="demo-type-btn active" onclick="switchType(0)">📍 Area Guide</button>
+          <button class="demo-type-btn" onclick="switchType(1)">📊 Market Update</button>
+          <button class="demo-type-btn" onclick="switchType(2)">💰 Investment ROI</button>
+          <button class="demo-type-btn" onclick="switchType(3)">🏠 Listing</button>
+          <button class="demo-type-btn" onclick="switchType(4)">🆕 New Launch</button>
+          <div class="demo-palette">
+            <div class="demo-sidebar-label">Color Palette</div>
+            <div class="demo-palette-row">
+              <div class="palette-swatch active" style="background:linear-gradient(135deg,#0A0A0A 50%,#FF4D00 50%)" onclick="switchPalette(0)"></div>
+              <div class="palette-swatch" style="background:linear-gradient(135deg,#0A0A0A 50%,#C9A84C 50%)" onclick="switchPalette(1)"></div>
+              <div class="palette-swatch" style="background:linear-gradient(135deg,#0D1B2A 50%,#4DA8FF 50%)" onclick="switchPalette(2)"></div>
+              <div class="palette-swatch" style="background:linear-gradient(135deg,#0A120A 50%,#34D399 50%)" onclick="switchPalette(3)"></div>
+              <div class="palette-swatch" style="background:linear-gradient(135deg,#F8F6F0 50%,#FF4D00 50%)" onclick="switchPalette(4)"></div>
+            </div>
+          </div>
+        </div>
+        <!-- LIVE SLIDE PREVIEW -->
+        <div class="demo-preview">
+          <div class="demo-slides-container">
+            <div class="demo-slide" id="demoSlide">
+              <div class="slide-num" id="slideNum">01 / 07</div>
+              <div class="slide-tag" id="slideTag">DUBAI MARINA</div>
+              <h3 id="slideTitle">Dubai Marina<br>Area Guide 2026</h3>
+              <div id="slideSub"><p>Everything you need to know about living, investing, and renting in Dubai Marina.</p></div>
+            </div>
+            <div class="demo-slide-dots" id="slideDots"></div>
+          </div>
+        </div>
+      </div>
+      <!-- AI CHAT BAR like aiCarousels -->
+      <div class="demo-chatbar">
+        <div class="demo-chatbar-input">Ask AI to change... e.g. "make it more investment-focused"</div>
+        <div class="demo-chatbar-btn">✨ Edit</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="how-section" id="how">
+  <div class="inner">
+    <div class="section-tag">How It Works</div>
+    <div class="section-title">Three steps. Thirty seconds.</div>
+    <p class="section-sub">No research. No Canva. No designer. You just type.</p>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">01</div><div class="step-icon">📍</div><div class="step-title">Pick & type</div><div class="step-desc">Choose a content type and type an area name or topic. That's the only input we need.</div></div>
+      <div class="step-card"><div class="step-num">02</div><div class="step-icon">⚡</div><div class="step-title">AI does everything</div><div class="step-desc">Researches the area, pulls real prices and yields, writes the copy, designs the slides, applies your brand.</div></div>
+      <div class="step-card"><div class="step-num">03</div><div class="step-icon">📲</div><div class="step-title">Download & post</div><div class="step-desc">Pixel-perfect images at the right aspect ratio. Download and post to Instagram, LinkedIn, or anywhere.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATE GALLERY with visual previews -->
+<div class="templates-section" id="templates">
+  <div class="inner">
+    <div class="section-tag">Template Library</div>
+    <div class="section-title">Every content type agents need</div>
+    <p class="section-sub">Each template auto-fills with real market data. No generic filler.</p>
+    <div class="template-grid" id="templateGrid"></div>
+  </div>
+</div>
+
+<!-- DIFFERENTIATOR -->
+<div class="diff-section">
+  <div class="inner">
+    <div class="section-tag">Why AgentContent</div>
+    <div class="section-title">Not another Canva with ChatGPT</div>
+    <p class="section-sub">Other tools make you research, write, and design. We do all three in one click.</p>
+    <div class="diff-grid">
+      <div class="diff-card us">
+        <div class="diff-title">AgentContent</div>
+        <div class="diff-item"><span class="ico">✓</span> Type "Dubai Marina" → get a complete carousel with real data</div>
+        <div class="diff-item"><span class="ico">✓</span> Actual prices, yields, and transactions — not AI guesses</div>
+        <div class="diff-item"><span class="ico">✓</span> Pixel-perfect text — no garbled AI-image typography</div>
+        <div class="diff-item"><span class="ico">✓</span> Your brand colors, fonts, and logo on every slide</div>
+        <div class="diff-item"><span class="ico">✓</span> 30 seconds from idea to Instagram-ready images</div>
+        <div class="diff-item"><span class="ico">✓</span> Built specifically for Dubai real estate</div>
+      </div>
+      <div class="diff-card them">
+        <div class="diff-title">Everyone Else</div>
+        <div class="diff-item"><span class="ico">✗</span> You write the content, they just make it pretty</div>
+        <div class="diff-item"><span class="ico">✗</span> Generic templates — no real estate data</div>
+        <div class="diff-item"><span class="ico">✗</span> AI images with unreadable, garbled text</div>
+        <div class="diff-item"><span class="ico">✗</span> Manual brand setup for every single post</div>
+        <div class="diff-item"><span class="ico">✗</span> 2-4 hours per carousel including research time</div>
+        <div class="diff-item"><span class="ico">✗</span> One-size-fits-all, no industry focus</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="pricing-section" id="pricing">
+  <div class="inner">
+    <div class="section-tag">Pricing</div>
+    <div class="section-title">Start free. Scale when ready.</div>
+    <div class="section-sub">No credit card required.</div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Starter</div>
+        <div class="price-amount">Free</div>
+        <p class="price-desc">Try it out, zero risk.</p>
+        <ul class="price-features">
+          <li>5 generations per month</li>
+          <li>3 content types</li>
+          <li>AgentContent watermark</li>
+          <li>Standard export (1080px)</li>
+        </ul>
+        <a href="#waitlist" class="price-btn outline">Get Started</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier">Pro</div>
+        <div class="price-amount">$29<span>/mo</span></div>
+        <p class="price-desc">For active agents and small teams.</p>
+        <ul class="price-features">
+          <li>Unlimited generations</li>
+          <li>All content types + presentations</li>
+          <li>Custom branding & logo</li>
+          <li>HD export (2160px)</li>
+          <li>AI editing & refinement</li>
+        </ul>
+        <a href="#waitlist" class="price-btn gold">Join Waitlist</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Agency</div>
+        <div class="price-amount">$79<span>/mo</span></div>
+        <p class="price-desc">For brokerages and agencies.</p>
+        <ul class="price-features">
+          <li>Everything in Pro</li>
+          <li>5 team members</li>
+          <li>Brand presets per agent</li>
+          <li>Bulk generation</li>
+          <li>API access</li>
+        </ul>
+        <a href="#waitlist" class="price-btn outline">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA / WAITLIST -->
+<section class="cta-section" id="waitlist">
+  <h2>Stop designing.<br>Start <em>posting</em>.</h2>
+  <p>Join the waitlist and be first to generate AI-powered content built for Dubai real estate.</p>
+  <form class="waitlist-form" onsubmit="handleWaitlist(event)">
+    <input type="email" placeholder="Your email address" required>
+    <button type="submit">Join Waitlist</button>
+  </form>
+  <div id="waitlistSuccess" style="display:none;color:var(--accent);font-weight:500;margin-top:14px;">🔥 You're in! We'll reach out with early access soon.</div>
+  <p class="waitlist-note">No spam. We'll notify you when we launch.</p>
+</section>
+
+<footer>
+  <div class="footer-logo">Agent<span>Content</span></div>
+  <div class="footer-links">
+    <a href="#">Twitter</a>
+    <a href="#">Instagram</a>
+    <a href="mailto:hello@agentcontent.net">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 AgentContent. All rights reserved.</div>
+</footer>
+
+<script>
+// WAITLIST
+const WAITLIST_ENDPOINT = null;
+const EMAIL_FIELD = 'entry.123456';
+function handleWaitlist(e) {
+  e.preventDefault();
+  const email = e.target.querySelector('input').value;
+  if (WAITLIST_ENDPOINT) { const fd=new FormData(); fd.append(EMAIL_FIELD,email); fetch(WAITLIST_ENDPOINT,{method:'POST',mode:'no-cors',body:fd}); }
+  console.log('Waitlist signup:', email);
+  e.target.style.display='none';
+  document.getElementById('waitlistSuccess').style.display='block';
+}
+
+// DEMO DATA
+const palettes = [
+  {bg:'#0A0A0A',accent:'#FF4D00',text:'#F0F0F3',tagBg:'rgba(255,77,0,0.15)'},
+  {bg:'#0A0A0A',accent:'#C9A84C',text:'#F0F0F3',tagBg:'rgba(201,168,76,0.15)'},
+  {bg:'#0D1B2A',accent:'#4DA8FF',text:'#F0F0F3',tagBg:'rgba(77,168,255,0.15)'},
+  {bg:'#0A120A',accent:'#34D399',text:'#F0F0F3',tagBg:'rgba(52,211,153,0.15)'},
+  {bg:'#F8F6F0',accent:'#FF4D00',text:'#1A1A1A',tagBg:'rgba(255,77,0,0.1)'},
+];
+const types = [
+  {slides:[
+    {num:'01 / 07',tag:'DUBAI MARINA',title:'Dubai Marina<br>Area Guide 2026',sub:'Everything you need to know about living, investing, and renting in Dubai Marina.'},
+    {num:'02 / 07',tag:'AVERAGE RENT',title:'Studio & 1BR Rents',stat:'AED 85K',statLabel:'Average 1BR rent per year'},
+    {num:'03 / 07',tag:'RENTAL YIELD',title:'Investor Returns',stat:'6.8%',statLabel:'Average gross rental yield'},
+    {num:'04 / 07',tag:'TOP BUILDINGS',title:'Most Popular Towers',sub:'Princess Tower · Marina Gate · Cayan Tower · Damac Heights · Jumeirah Living'},
+    {num:'05 / 07',tag:'LIFESTYLE',title:'Walk. Eat. Live.',sub:'Beach access, Marina Walk dining, tram connectivity, 400+ restaurants within walking distance.'},
+    {num:'06 / 07',tag:'PRICE TREND',title:'Prices Rising',stat:'+12%',statLabel:'Year-over-year price growth'},
+    {num:'07 / 07',tag:'GET IN TOUCH',title:'Want to invest in<br>Dubai Marina?',sub:'DM me or tap the link in bio for a free consultation.'},
+  ]},
+  {slides:[
+    {num:'01 / 06',tag:'Q4 2025',title:'Dubai Market<br>Update',sub:'Transaction volumes, price movements, and what to watch in 2026.'},
+    {num:'02 / 06',tag:'TRANSACTIONS',title:'Record Quarter',stat:'45,961',statLabel:'Total transactions in Q4 2025'},
+    {num:'03 / 06',tag:'PRICE GROWTH',title:'Still Climbing',stat:'+18%',statLabel:'Average price increase YoY'},
+    {num:'04 / 06',tag:'HOT AREAS',title:'Top Performing',sub:'JVC · Business Bay · Dubai Hills · Creek Harbour · Damac Lagoons'},
+    {num:'05 / 06',tag:'OFF-PLAN',title:'Off-Plan Surge',stat:'62%',statLabel:'Share of total transactions'},
+    {num:'06 / 06',tag:'GET IN TOUCH',title:'Want the full<br>market report?',sub:'DM me for a detailed breakdown by area.'},
+  ]},
+  {slides:[
+    {num:'01 / 06',tag:'INVESTMENT',title:'Dubai ROI<br>Calculator 2026',sub:'How much can you really earn from a Dubai property investment?'},
+    {num:'02 / 06',tag:'1BR APARTMENT',title:'Starting Point',stat:'AED 850K',statLabel:'Average 1BR in JVC'},
+    {num:'03 / 06',tag:'RENTAL INCOME',title:'Annual Return',stat:'AED 65K',statLabel:'Expected rental income/year'},
+    {num:'04 / 06',tag:'NET YIELD',title:'After All Costs',stat:'7.2%',statLabel:'Net rental yield'},
+    {num:'05 / 06',tag:'5-YEAR ROI',title:'Total Return',stat:'+54%',statLabel:'Combined yield + appreciation'},
+    {num:'06 / 06',tag:'GET STARTED',title:'Ready to<br>invest?',sub:'Let me find you the best ROI property for your budget.'},
+  ]},
+  {slides:[
+    {num:'01 / 06',tag:'FOR SALE',title:'Stunning 2BR<br>Marina View',sub:'Fully upgraded apartment with panoramic views of Dubai Marina and the sea.'},
+    {num:'02 / 06',tag:'PRICE',title:'Listed At',stat:'AED 2.8M',statLabel:'Negotiable'},
+    {num:'03 / 06',tag:'SPECS',title:'The Details',sub:'2 Bed · 2 Bath · 1,450 sqft · Floor 38 · Unfurnished · Ready to move in'},
+    {num:'04 / 06',tag:'BUILDING',title:'Marina Gate 1',sub:'Pool, gym, concierge, direct Marina Walk access, pet-friendly.'},
+    {num:'05 / 06',tag:'LOCATION',title:'5 min walk to',sub:'Marina Mall · Beach · Metro · Tram · 300+ restaurants'},
+    {num:'06 / 06',tag:'BOOK VIEWING',title:'Interested?',sub:'DM me to schedule a viewing this week.'},
+  ]},
+  {slides:[
+    {num:'01 / 07',tag:'NEW LAUNCH',title:'Emaar Beachfront<br>Grand Bleu 2',sub:'The most anticipated beachfront launch of 2026.'},
+    {num:'02 / 07',tag:'STARTING FROM',title:'Entry Price',stat:'AED 1.9M',statLabel:'1BR starting price'},
+    {num:'03 / 07',tag:'PAYMENT PLAN',title:'60/40',sub:'60% during construction · 40% on handover · Expected completion Q4 2027'},
+    {num:'04 / 07',tag:'DEVELOPER',title:'Emaar Properties',sub:"Dubai's most trusted developer. Burj Khalifa, Dubai Mall, Downtown."},
+    {num:'05 / 07',tag:'AMENITIES',title:'What You Get',sub:'Private beach · Infinity pool · Gym · Kids play area · Direct beach access'},
+    {num:'06 / 07',tag:'EXPECTED ROI',title:'Projected Return',stat:'8.1%',statLabel:'Estimated rental yield on completion'},
+    {num:'07 / 07',tag:'REGISTER',title:'Register your<br>interest now',sub:'Limited units. DM me to secure your spot on the VIP list.'},
+  ]},
+];
+
+let currentType=0, currentSlide=0, currentPalette=0;
+
+function adjustColor(hex,amt){hex=hex.replace('#','');const r=Math.min(255,Math.max(0,parseInt(hex.substr(0,2),16)+amt));const g=Math.min(255,Math.max(0,parseInt(hex.substr(2,2),16)+amt));const b=Math.min(255,Math.max(0,parseInt(hex.substr(4,2),16)+amt));return'#'+r.toString(16).padStart(2,'0')+g.toString(16).padStart(2,'0')+b.toString(16).padStart(2,'0')}
+
+function renderSlide(){
+  const p=palettes[currentPalette], s=types[currentType].slides[currentSlide], el=document.getElementById('demoSlide');
+  el.style.background='linear-gradient(145deg,'+p.bg+' 0%,'+adjustColor(p.bg,12)+' 100%)';
+  document.getElementById('slideNum').textContent=s.num;
+  document.getElementById('slideNum').style.color=p.accent+'55';
+  const tag=document.getElementById('slideTag'); tag.textContent=s.tag; tag.style.background=p.tagBg; tag.style.color=p.accent;
+  const t=document.getElementById('slideTitle'); t.innerHTML=s.title; t.style.color=p.text;
+  const sub=document.getElementById('slideSub');
+  if(s.stat){sub.innerHTML='<div class="slide-stat" style="color:'+p.accent+'">'+s.stat+'</div><div class="slide-stat-label" style="color:'+p.text+'">'+s.statLabel+'</div>';}
+  else{sub.innerHTML='<p style="color:'+p.text+';opacity:0.6">'+s.sub+'</p>';}
+  // dots
+  const dots=document.getElementById('slideDots'),total=types[currentType].slides.length;
+  dots.innerHTML='';
+  for(let i=0;i<total;i++){const d=document.createElement('div');d.className='demo-slide-dot'+(i===currentSlide?' active':'');d.onclick=()=>goSlide(i);dots.appendChild(d);}
+}
+
+function switchType(i){currentType=i;currentSlide=0;document.querySelectorAll('.demo-type-btn').forEach((b,j)=>b.classList.toggle('active',j===i));renderSlide();}
+function switchPalette(i){currentPalette=i;document.querySelectorAll('.palette-swatch').forEach((s,j)=>s.classList.toggle('active',j===i));renderSlide();}
+function goSlide(i){currentSlide=i;renderSlide();}
+
+setInterval(()=>{currentSlide=(currentSlide+1)%types[currentType].slides.length;renderSlide();},3000);
+
+// TEMPLATE GALLERY
+const templates=[
+  {name:'Area Guide',desc:'Neighborhood deep-dive with rent, yields & lifestyle',badge:'Most Popular',bg:'#0A0A0A',accent:'#FF4D00',tag:'DUBAI MARINA',title:'Dubai Marina<br>Area Guide',stat:'',sub:'Rent · Yields · Lifestyle · Top Buildings'},
+  {name:'Market Update',desc:'Transactions, prices, trending areas',badge:'',bg:'#0D1B2A',accent:'#4DA8FF',tag:'Q4 2025',title:'Market<br>Update',stat:'45,961',sub:''},
+  {name:'Investment ROI',desc:'Returns, yields & capital appreciation',badge:'',bg:'#0A120A',accent:'#34D399',tag:'INVESTMENT',title:'ROI<br>Calculator',stat:'7.2%',sub:''},
+  {name:'Property Listing',desc:'Showcase with specs, price & features',badge:'',bg:'#0A0A0A',accent:'#C9A84C',tag:'FOR SALE',title:'Stunning 2BR<br>Marina View',stat:'AED 2.8M',sub:''},
+  {name:'New Launch',desc:'Off-plan project with payment plans',badge:'High Demand',bg:'#1A0A0A',accent:'#FF4D00',tag:'NEW LAUNCH',title:'Grand Bleu 2<br>by Emaar',stat:'',sub:'Starting AED 1.9M · 60/40 Plan'},
+  {name:'Rent vs Buy',desc:'Side-by-side cost comparison',badge:'',bg:'#0A0A14',accent:'#818CF8',tag:'COMPARISON',title:'Rent vs Buy<br>in JVC',stat:'',sub:'Monthly costs · Break-even · 5yr outlook'},
+  {name:'Pitch Deck',desc:'Client presentations & investor reports',badge:'Coming Soon',bg:'#111113',accent:'#FF4D00',tag:'PRESENTATION',title:'Pitch Deck<br>Generator',stat:'',sub:'12 slides · Auto-branded · Real data'},
+  {name:'Market Report',desc:'PDF reports with charts & data tables',badge:'Coming Soon',bg:'#111113',accent:'#6B6B76',tag:'REPORT',title:'Market<br>Report PDF',stat:'',sub:'Charts · Tables · Professional layout'},
+  {name:'Social Captions',desc:'Captions, hashtags & engagement hooks',badge:'Coming Soon',bg:'#111113',accent:'#6B6B76',tag:'CAPTION',title:'Auto-Generated<br>Captions',stat:'',sub:'Hashtags · CTAs · Platform-optimized'},
+];
+const emojis=['📍','📊','💰','🏠','🆕','⚖️','📑','📄','✍️'];
+
+function buildTemplates(){
+  const grid=document.getElementById('templateGrid');
+  templates.forEach((t,i)=>{
+    const tc=t.bg==='#F8F6F0'?'#1A1A1A':'#F0F0F3';
+    grid.innerHTML+=`<div class="template-card"><div class="template-preview"><div class="template-slide-mini" style="background:${t.bg};color:${tc}"><div class="mini-tag" style="background:${t.accent}18;color:${t.accent}">${t.tag}</div><h4>${t.title}</h4>${t.stat?`<div class="mini-stat" style="color:${t.accent}">${t.stat}</div>`:''}${t.sub?`<p style="color:${tc}">${t.sub}</p>`:''}</div></div><div class="template-info"><div class="template-name">${emojis[i]} ${t.name}</div><div class="template-desc">${t.desc}</div>${t.badge?`<div class="template-badge">${t.badge}</div>`:''}</div></div>`;
+  });
+}
+
+renderSlide(); buildTemplates();
+</script>
+</body>
+</html>
